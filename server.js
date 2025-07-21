@@ -11,7 +11,7 @@ const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
 const GENIE_WEBHOOK_URL = process.env.GENIE_WEBHOOK_URL; // or webhook if you have one
 const PLAYBOOK_ID = process.env.PLAYBOOK_ID;
 
-app.post("/slack/events", async (req, res) => {
+const handleSlackEvents = async (req, res) => {
   const { event } = req.body;
 
   if (event && event.text && event.type === "app_mention") {
@@ -53,7 +53,9 @@ app.post("/slack/events", async (req, res) => {
   }
 
   res.status(200).send("OK");
-});
+};
+app.post("/slack/events", handleSlackEvents);
+app.get("/slack/events", handleSlackEvents);
 
 const PORT = 3000;
 app.listen(PORT, () => {
